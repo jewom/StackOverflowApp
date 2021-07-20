@@ -31,18 +31,12 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, { questions ->
+            questions.items.forEach { Log.d("TEST_LOG", it.title) }
+        })
 
-        viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, { apiResult ->
-            when(apiResult){
-                is ApiResult.Success -> {
-                    apiResult.data.items.forEach {
-                        Log.d("TEST_LOG", it.title)
-                    }
-                }
-                is ApiResult.Error -> {
-                    Log.d("TEST_LOG", "ERROR : ${apiResult.errorResponse}")
-                }
-            }
+        viewModel.apiErrorLiveData.observe(viewLifecycleOwner, { apiResultError ->
+            Log.e("TEST_LOG", apiResultError.errorResponse)
         })
 
         viewModel.getQuestions()
