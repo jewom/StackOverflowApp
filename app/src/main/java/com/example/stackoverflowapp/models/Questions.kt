@@ -9,3 +9,4 @@ data class Questions(
     @SerializedName("quota_max") val quotaMax: Int,
     @SerializedName("quota_remaining") val quotaRemaining: Int
 )
+

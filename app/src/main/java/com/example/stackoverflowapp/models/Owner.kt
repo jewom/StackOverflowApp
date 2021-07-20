@@ -12,3 +12,5 @@ data class Owner(
     @SerializedName("user_id") val userId: Int,
     @SerializedName("user_type") val userType: String
 )
+
+

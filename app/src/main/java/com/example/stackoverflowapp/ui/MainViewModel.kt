@@ -14,16 +14,17 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
-    var lastQuestionsLiveData = MutableLiveData<Questions>()
+    var lastQuestionsLiveData = MutableLiveData<Questions?>()
     var apiErrorLiveData = MutableLiveData<ApiResult.Error>()
 
-    fun getQuestions() {
+    fun getLastQuestions() {
         viewModelScope.launch {
             when(val result = RemoteRepository.getLastQuestions()){
-                is ApiResult.Success -> lastQuestionsLiveData.postValue(result.data!!)
+                is ApiResult.Success -> lastQuestionsLiveData.postValue(result.data)
                 is ApiResult.Error -> apiErrorLiveData.postValue(result)
             }
         }
     }
 
 }
+

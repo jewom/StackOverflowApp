@@ -2,6 +2,7 @@ package com.example.stackoverflowapp.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,15 +29,15 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, { questions ->
+        viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, {
             // TODO : affichage des questions dans l'UI
         })
 
-        viewModel.apiErrorLiveData.observe(viewLifecycleOwner, { apiResultError ->
+        viewModel.apiErrorLiveData.observe(viewLifecycleOwner, {
             // TODO : gestion de l'erreur (String : apiResultError.errorResponse)
         })
 
-        viewModel.getQuestions()
+        viewModel.getLastQuestions()
 
     }
 
