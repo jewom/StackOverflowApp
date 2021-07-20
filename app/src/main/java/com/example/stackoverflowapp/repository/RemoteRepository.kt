@@ -1,13 +1,20 @@
 package com.example.stackoverflowapp.repository
 
 import com.example.stackoverflowapp.api.ApiResult
-import com.example.stackoverflowapp.api.retrofitClient
-import com.example.stackoverflowapp.api.safeApiCall
-import com.example.stackoverflowapp.models.Questions
+import retrofit2.Response
 
-class RemoteRepository {
+object RemoteRepository {
 
-    suspend fun getLastQuestions(): ApiResult<Questions> =
-        safeApiCall { retrofitClient.getLastQuestions() }
+    suspend fun <T> safeApiCall(call: suspend () -> Response<T>): ApiResult<T> {
+        return try {
+            val myResp: Response<T> = call.invoke() // invoke() est une méthode de coroutines
+            when {
+                myResp.isSuccessful -> ApiResult.Success<T>(myResp.body()!!)
+                else -> ApiResult.Error("Error")
+            }
+        } catch (e: Exception) {
+            ApiResult.Error(e.message ?: "Internet error runs")
+        }
+    }
 
 }

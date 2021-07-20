@@ -1,25 +1,27 @@
 package com.example.stackoverflowapp.ui
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stackoverflowapp.api.ApiResult
+import com.example.stackoverflowapp.api.retrofitClient
 import com.example.stackoverflowapp.models.Questions
 import com.example.stackoverflowapp.repository.RemoteRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
-    val getLastQuestionsSuccess = MutableLiveData<Questions>()
-    val getLastQuestionsError = MutableLiveData<String>()
+    var lastQuestionsLiveData = MutableLiveData<ApiResult<Questions>>()
 
-    fun getLastQuestions() {
+    fun getQuestions() {
         viewModelScope.launch {
-            when (val retrofitPost = RemoteRepository().getLastQuestions()) {
-                is ApiResult.Success -> getLastQuestionsSuccess.postValue(retrofitPost.data)
-                is ApiResult.Error -> getLastQuestionsError.postValue(retrofitPost.errorResponse)
-            }
+            lastQuestionsLiveData.postValue(
+                RemoteRepository.safeApiCall{ retrofitClient.getLastQuestions() }
+            )
         }
     }
+
 
 }

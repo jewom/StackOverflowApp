@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.example.stackoverflowapp.R
+import com.example.stackoverflowapp.api.ApiResult
 import com.example.stackoverflowapp.databinding.FragmentMainBinding
+import com.example.stackoverflowapp.models.Questions
 
 class MainFragment : Fragment() {
 
@@ -19,30 +21,31 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
         val binding: FragmentMainBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main, container, false
         )
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getLastQuestionsSuccess.observe(viewLifecycleOwner, {
-            it?.items?.forEach {  item ->
-                Log.d("TEST_LOG", item.title)
+
+        viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, { apiResult ->
+            when(apiResult){
+                is ApiResult.Success -> {
+                    apiResult.data.items.forEach {
+                        Log.d("TEST_LOG", it.title)
+                    }
+                }
+                is ApiResult.Error -> {
+                    Log.d("TEST_LOG", "ERROR : ${apiResult.errorResponse}")
+                }
             }
         })
 
-        viewModel.getLastQuestionsError.observe(viewLifecycleOwner, {
-            Log.e("TEST_LOG", "ERROR : $it")
-        })
-
-        viewModel.getLastQuestions()
+        viewModel.getQuestions()
 
     }
 
