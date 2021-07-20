@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stackoverflowapp.api.ApiResult
 import com.example.stackoverflowapp.api.retrofitClient
+import com.example.stackoverflowapp.api.safeApiCall
 import com.example.stackoverflowapp.models.Questions
 import com.example.stackoverflowapp.repository.RemoteRepository
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class MainViewModel : ViewModel() {
 
     fun getQuestions() {
         viewModelScope.launch {
-            when(val result = RemoteRepository.safeApiCall{ retrofitClient.getLastQuestions() }){
+            when(val result = RemoteRepository.getLastQuestions()){
                 is ApiResult.Success -> lastQuestionsLiveData.postValue(result.data!!)
                 is ApiResult.Error -> apiErrorLiveData.postValue(result)
             }

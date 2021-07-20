@@ -2,16 +2,13 @@ package com.example.stackoverflowapp.ui
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.example.stackoverflowapp.R
-import com.example.stackoverflowapp.api.ApiResult
 import com.example.stackoverflowapp.databinding.FragmentMainBinding
-import com.example.stackoverflowapp.models.Questions
 
 class MainFragment : Fragment() {
 
@@ -32,11 +29,11 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.lastQuestionsLiveData.observe(viewLifecycleOwner, { questions ->
-            questions.items.forEach { Log.d("TEST_LOG", it.title) }
+            // TODO : affichage des questions dans l'UI
         })
 
         viewModel.apiErrorLiveData.observe(viewLifecycleOwner, { apiResultError ->
-            Log.e("TEST_LOG", apiResultError.errorResponse)
+            // TODO : gestion de l'erreur (String : apiResultError.errorResponse)
         })
 
         viewModel.getQuestions()
